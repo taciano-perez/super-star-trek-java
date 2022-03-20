@@ -52,12 +52,12 @@ public class GalaxyMap {
     }
 
     double fnd(int i) {
-        return Math.sqrt((klingonQuadrants[i][1] - enterprise.getSector()[Enterprise.X]) ^ 2 + (klingonQuadrants[i][2] - enterprise.getSector()[Enterprise.Y]) ^ 2);
+        return Math.sqrt((klingonQuadrants[i][1] - enterprise.getSector()[Enterprise.COORD_X]) ^ 2 + (klingonQuadrants[i][2] - enterprise.getSector()[Enterprise.COORD_Y]) ^ 2);
     }
 
     public GalaxyMap() {
-        int quadrantX = enterprise.getQuadrant()[Enterprise.X];
-        int quadrantY = enterprise.getQuadrant()[Enterprise.Y];
+        int quadrantX = enterprise.getQuadrant()[Enterprise.COORD_X];
+        int quadrantY = enterprise.getQuadrant()[Enterprise.COORD_Y];
         // KLINGONS, STARBASES, STARS
         IntStream.range(1, 8).forEach(x -> {
             IntStream.range(1, 8).forEach(y -> {
@@ -95,8 +95,8 @@ public class GalaxyMap {
     }
 
     void newQuadrant(final double stardate, final double initialStardate) {   // 1320
-        final int quadrantX = enterprise.getQuadrant()[Enterprise.X];
-        final int quadrantY = enterprise.getQuadrant()[Enterprise.Y];
+        final int quadrantX = enterprise.getQuadrant()[Enterprise.COORD_X];
+        final int quadrantY = enterprise.getQuadrant()[Enterprise.COORD_Y];
         klingons = 0;
         starbases = 0;
         stars = 0;
@@ -129,7 +129,7 @@ public class GalaxyMap {
             klingonQuadrants[i][3] = 0;
         });
         // POSITION ENTERPRISE IN QUADRANT
-        insertMarker(MARKER_ENTERPRISE, enterprise.getSector()[Enterprise.X], enterprise.getSector()[Enterprise.Y]);
+        insertMarker(MARKER_ENTERPRISE, enterprise.getSector()[Enterprise.COORD_X], enterprise.getSector()[Enterprise.COORD_Y]);
         // position Klingons
         if (klingons >= 1) {
             for (int i = 1; i <= klingons; i++) {
@@ -190,10 +190,10 @@ public class GalaxyMap {
     }
 
     public void moveEnterprise(final float course, final float warp, final int n, final double stardate, final double initialStardate, final int missionDuration, final GameCallback callback) {
-        insertMarker(MARKER_EMPTY, Util.toInt(enterprise.getSector()[Enterprise.X]), Util.toInt(enterprise.getSector()[Enterprise.Y]));
+        insertMarker(MARKER_EMPTY, Util.toInt(enterprise.getSector()[Enterprise.COORD_X]), Util.toInt(enterprise.getSector()[Enterprise.COORD_Y]));
         final int[] sector = enterprise.moveShip(course, n, quadrantMap, stardate, initialStardate, missionDuration, callback);
-        int sectorX = sector[Enterprise.X];
-        int sectorY = sector[Enterprise.Y];
+        int sectorX = sector[Enterprise.COORD_X];
+        int sectorY = sector[Enterprise.COORD_Y];
         insertMarker(MARKER_ENTERPRISE, Util.toInt(sectorX), Util.toInt(sectorY));
         enterprise.maneuverEnergySR(n);
         double stardateDelta = 1;
@@ -204,8 +204,8 @@ public class GalaxyMap {
     }
 
     void shortRangeSensorScan(final double stardate) {
-        final int sectorX = enterprise.getSector()[Enterprise.X];
-        final int sectorY = enterprise.getSector()[Enterprise.Y];
+        final int sectorX = enterprise.getSector()[Enterprise.COORD_X];
+        final int sectorY = enterprise.getSector()[Enterprise.COORD_Y];
         boolean docked = false;
         String shipCondition; // ship condition (docked, red, yellow, green)
         for (int i = sectorX - 1; i <= sectorX + 1; i++) {
@@ -253,7 +253,7 @@ public class GalaxyMap {
                     Util.println(sectorMapRow + "        CONDITION          " + shipCondition);
                     break;
                 case 3:
-                    Util.println(sectorMapRow + "        QUADRANT           " + enterprise.getQuadrant()[Enterprise.X] + "," + enterprise.getQuadrant()[Enterprise.Y]);
+                    Util.println(sectorMapRow + "        QUADRANT           " + enterprise.getQuadrant()[Enterprise.COORD_X] + "," + enterprise.getQuadrant()[Enterprise.COORD_Y]);
                     break;
                 case 4:
                     Util.println(sectorMapRow + "        SECTOR             " + sectorX + "," + sectorY);
@@ -276,8 +276,8 @@ public class GalaxyMap {
 
     void longRangeSensorScan() {
         // LONG RANGE SENSOR SCAN
-        final int quadrantX = enterprise.getQuadrant()[Enterprise.X];
-        final int quadrantY = enterprise.getQuadrant()[Enterprise.Y];
+        final int quadrantX = enterprise.getQuadrant()[Enterprise.COORD_X];
+        final int quadrantY = enterprise.getQuadrant()[Enterprise.COORD_Y];
         if (enterprise.getDeviceStatus()[Enterprise.DEVICE_LONG_RANGE_SENSORS] < 0) {
             Util.println("LONG RANGE SENSORS ARE INOPERABLE");
             return;
@@ -310,8 +310,8 @@ public class GalaxyMap {
 
     void firePhasers(GameCallback callback) {
         final double[] deviceStatus = enterprise.getDeviceStatus();
-        final int quadrantX = enterprise.getQuadrant()[Enterprise.X];
-        final int quadrantY = enterprise.getQuadrant()[Enterprise.Y];
+        final int quadrantX = enterprise.getQuadrant()[Enterprise.COORD_X];
+        final int quadrantY = enterprise.getQuadrant()[Enterprise.COORD_Y];
         if (deviceStatus[Enterprise.DEVICE_PHASER_CONTROL] < 0) {
             Util.println("PHASERS INOPERATIVE");
             return;
@@ -377,8 +377,8 @@ public class GalaxyMap {
         enterprise.decreaseEnergy(2);
         enterprise.decreaseTorpedoes(1);
         float x2 = cardinalDirections[ic1][2] + (cardinalDirections[ic1 + 1][2] - cardinalDirections[ic1][2]) * (c1 - ic1);
-        float x = enterprise.getSector()[Enterprise.X];
-        float y = enterprise.getSector()[Enterprise.Y];
+        float x = enterprise.getSector()[Enterprise.COORD_X];
+        float y = enterprise.getSector()[Enterprise.COORD_Y];
         Util.println("TORPEDO TRACK:");
         while (true) {
             x = x + x1;
@@ -422,8 +422,8 @@ public class GalaxyMap {
                 }
             }
             insertMarker(MARKER_EMPTY, Util.toInt(x), Util.toInt(y));
-            final int quadrantX = enterprise.getQuadrant()[Enterprise.X];
-            final int quadrantY = enterprise.getQuadrant()[Enterprise.Y];
+            final int quadrantX = enterprise.getQuadrant()[Enterprise.COORD_X];
+            final int quadrantY = enterprise.getQuadrant()[Enterprise.COORD_Y];
             galaxy[quadrantX][quadrantY] = klingons * 100 + starbases * 10 + stars;
             chartedGalaxy[quadrantX][quadrantY] = galaxy[quadrantX][quadrantY];
             klingonsShoot(callback);
@@ -431,8 +431,8 @@ public class GalaxyMap {
     }
 
     public void cumulativeGalacticRecord(final boolean cumulativeReport) {
-        final int quadrantX = enterprise.getQuadrant()[Enterprise.X];
-        final int quadrantY = enterprise.getQuadrant()[Enterprise.Y];
+        final int quadrantX = enterprise.getQuadrant()[Enterprise.COORD_X];
+        final int quadrantY = enterprise.getQuadrant()[Enterprise.COORD_Y];
         if (cumulativeReport) {
             Util.println("");
             Util.println("        ");
@@ -472,8 +472,8 @@ public class GalaxyMap {
     }
 
     public void photonTorpedoData() {
-        int sectorX = enterprise.getSector()[Enterprise.X];
-        int sectorY = enterprise.getSector()[Enterprise.Y];
+        int sectorX = enterprise.getSector()[Enterprise.COORD_X];
+        int sectorY = enterprise.getSector()[Enterprise.COORD_Y];
         if (klingons <= 0) {
             printNoEnemyShipsMessage();
             return;
@@ -487,10 +487,10 @@ public class GalaxyMap {
     }
 
     void directionDistanceCalculator() {    // 8150
-        int quadrantX = enterprise.getQuadrant()[Enterprise.X];
-        int quadrantY = enterprise.getQuadrant()[Enterprise.Y];
-        int sectorX = enterprise.getSector()[Enterprise.X];
-        int sectorY = enterprise.getSector()[Enterprise.Y];
+        int quadrantX = enterprise.getQuadrant()[Enterprise.COORD_X];
+        int quadrantY = enterprise.getQuadrant()[Enterprise.COORD_Y];
+        int sectorX = enterprise.getSector()[Enterprise.COORD_X];
+        int sectorY = enterprise.getSector()[Enterprise.COORD_Y];
         Util.println("DIRECTION/DISTANCE CALCULATOR:");
         Util.println("YOU ARE AT QUADRANT " + quadrantX + "," + quadrantY + " SECTOR " + sectorX + "," + sectorY);
         Util.print("PLEASE ENTER ");
@@ -536,8 +536,8 @@ public class GalaxyMap {
     }
 
     void starbaseNavData() {    // 8500
-        int sectorX = enterprise.getSector()[Enterprise.X];
-        int sectorY = enterprise.getSector()[Enterprise.Y];
+        int sectorX = enterprise.getSector()[Enterprise.COORD_X];
+        int sectorY = enterprise.getSector()[Enterprise.COORD_Y];
         if (starbases != 0) {
             Util.println("FROM ENTERPRISE TO STARBASE:");
             printDirection(sectorX, sectorY, starbaseX, starbaseY);

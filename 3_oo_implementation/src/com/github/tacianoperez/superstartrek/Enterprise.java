@@ -7,8 +7,8 @@ import java.util.stream.IntStream;
  */
 public class Enterprise {
 
-    public static final int X = 0;
-    public static final int Y = 1;
+    public static final int COORD_X = 0;
+    public static final int COORD_Y = 1;
 
     // devices
     static final int DEVICE_WARP_ENGINES = 1;
@@ -134,8 +134,8 @@ public class Enterprise {
     }
 
     public void setQuadrant(final int[] quadrant) {
-        this.quadrantX = quadrant[X];
-        this.quadrantY = quadrant[Y];
+        this.quadrantX = quadrant[COORD_X];
+        this.quadrantY = quadrant[COORD_Y];
     }
 
     public void setQuadrantX(int quadrantX) {
@@ -159,13 +159,13 @@ public class Enterprise {
     }
 
     public void setSector(final int[] sector) {
-        this.sectorX = sector[X];
-        this.sectorY = sector[Y];
+        this.sectorX = sector[COORD_X];
+        this.sectorY = sector[COORD_Y];
     }
 
     public void incrementSector(final float[] sector) {
-        this.sectorX += sector[X];
-        this.sectorY += sector[Y];
+        this.sectorX += sector[COORD_X];
+        this.sectorY += sector[COORD_Y];
     }
 
     public int[] moveShip(final float course, final int n, final String quadrantMap, final double stardate, final double initialStardate, final int missionDuration, final GameCallback callback) {

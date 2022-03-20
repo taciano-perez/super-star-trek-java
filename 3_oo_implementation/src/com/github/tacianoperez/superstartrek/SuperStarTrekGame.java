@@ -41,13 +41,13 @@ public class SuperStarTrekGame implements GameCallback {
     static final String COMMANDS = "NAVSRSLRSPHATORSHEDAMCOMXXX";
 
     // game state
-    GalaxyMap galaxyMap = new GalaxyMap();
-    double stardate = Util.toInt(Util.random() * 20 + 20); // T
+    final GalaxyMap galaxyMap = new GalaxyMap();
+    double stardate = Util.toInt(Util.random() * 20 + 20);
     int missionDuration = Math.max((25 + Util.toInt(Util.random() * 10)), galaxyMap.getKlingonsInGalaxy()+1);    // T9 (mission duration in stardates)
     boolean restart = false;
 
     // initial values
-    final double initialStardate = stardate;   // T0
+    final double initialStardate = stardate;
 
     public static void main(String[] args) {
         final SuperStarTrekGame game = new SuperStarTrekGame();

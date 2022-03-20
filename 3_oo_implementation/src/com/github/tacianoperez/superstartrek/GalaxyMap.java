@@ -15,25 +15,27 @@ public class GalaxyMap {
     static final String MARKER_STARBASE = ">!<";
     static final String MARKER_STAR = " * ";
 
+    static final int AVG_KLINGON_SHIELD_ENERGY = 200;
+
+    // galaxy map
+    public static final String QUADRANT_ROW = "                         ";
+    String quadrantMap = QUADRANT_ROW + QUADRANT_ROW + QUADRANT_ROW + QUADRANT_ROW + QUADRANT_ROW + QUADRANT_ROW + QUADRANT_ROW + Util.leftStr(QUADRANT_ROW, 17);       // current quadrant map
     final int[][] galaxy = new int[9][9];    // 8x8 galaxy map G
     final int[][] klingonQuadrants = new int[4][4];    // 3x3 position of klingons K
     final int[][] chartedGalaxy = new int[9][9];    // 8x8 charted galaxy map Z
 
-    public static final String QUADRANT_ROW = "                         ";
-    String quadrantMap = QUADRANT_ROW + QUADRANT_ROW + QUADRANT_ROW + QUADRANT_ROW + QUADRANT_ROW + QUADRANT_ROW + QUADRANT_ROW + Util.leftStr(QUADRANT_ROW, 17);       // current quadrant map
+    // galaxy state
+    int basesInGalaxy = 0;
+    int remainingKlingons;
+    int klingonsInGalaxy = 0;
+    final Enterprise enterprise = new Enterprise();
 
-    int basesInGalaxy = 0;   // B9
-    int remainingKlingons;     // K7
-    int klingonsInGalaxy = 0;   // K9
-    int klingons = 0; //K3
-    int starbases = 0;   // B3
-    int stars = 0;   // S3
-    int starbaseX = 0;   // X coordinate of starbase
+    // quadrant state
+    int klingons = 0;
+    int starbases = 0;
+    int stars = 0;
+    int starbaseX = 0; // X coordinate of starbase
     int starbaseY = 0; // Y coord of starbase
-
-    final int avgKlingonShieldEnergy = 200; // S9
-
-    Enterprise enterprise = new Enterprise();
 
     public Enterprise getEnterprise() {
         return enterprise;
@@ -58,7 +60,7 @@ public class GalaxyMap {
     public GalaxyMap() {
         int quadrantX = enterprise.getQuadrant()[Enterprise.COORD_X];
         int quadrantY = enterprise.getQuadrant()[Enterprise.COORD_Y];
-        // KLINGONS, STARBASES, STARS
+        // populate Klingons, Starbases, Stars
         IntStream.range(1, 8).forEach(x -> {
             IntStream.range(1, 8).forEach(y -> {
                 klingons = 0;
@@ -128,19 +130,19 @@ public class GalaxyMap {
         IntStream.range(1, 3).forEach(i -> {
             klingonQuadrants[i][3] = 0;
         });
-        // POSITION ENTERPRISE IN QUADRANT
+        // position enterprise in quadrant
         insertMarker(MARKER_ENTERPRISE, enterprise.getSector()[Enterprise.COORD_X], enterprise.getSector()[Enterprise.COORD_Y]);
-        // position Klingons
+        // position klingons
         if (klingons >= 1) {
             for (int i = 1; i <= klingons; i++) {
                 final int[] emptyCoordinate = findEmptyPlaceInQuadrant(quadrantMap);
                 insertMarker(MARKER_KLINGON, emptyCoordinate[0], emptyCoordinate[1]);
                 klingonQuadrants[i][1] = emptyCoordinate[0];
                 klingonQuadrants[i][2] = emptyCoordinate[1];
-                klingonQuadrants[i][3] = (int) Math.round(avgKlingonShieldEnergy * (0.5 + Util.random()));
+                klingonQuadrants[i][3] = (int) Math.round(AVG_KLINGON_SHIELD_ENERGY * (0.5 + Util.random()));
             }
         }
-        // position Bases
+        // position bases
         if (starbases >= 1) {
             final int[] emptyCoordinate = findEmptyPlaceInQuadrant(quadrantMap);
             starbaseX = emptyCoordinate[0];
@@ -155,7 +157,6 @@ public class GalaxyMap {
     }
 
     public void klingonsMoveAndFire(GameCallback callback) {
-        // KLINGONS MOVE/FIRE ON MOVING STARSHIP . . .
         for (int i = 1; i <= klingons; i++) {
             if (klingonQuadrants[i][3] == 0) continue;
             insertMarker(MARKER_EMPTY, klingonQuadrants[i][1], klingonQuadrants[i][2]);
@@ -200,7 +201,6 @@ public class GalaxyMap {
         if (warp < 1) stardateDelta = .1 * Util.toInt(10 * warp);
         callback.incrementStardate(stardateDelta);
         if (stardate > initialStardate + missionDuration) callback.endGameFail(false);
-//        shortRangeSensorScan(stardate);
     }
 
     void shortRangeSensorScan(final double stardate) {
@@ -275,7 +275,6 @@ public class GalaxyMap {
     }
 
     void longRangeSensorScan() {
-        // LONG RANGE SENSOR SCAN
         final int quadrantX = enterprise.getQuadrant()[Enterprise.COORD_X];
         final int quadrantY = enterprise.getQuadrant()[Enterprise.COORD_Y];
         if (enterprise.getDeviceStatus()[Enterprise.DEVICE_LONG_RANGE_SENSORS] < 0) {
@@ -486,7 +485,7 @@ public class GalaxyMap {
         }
     }
 
-    void directionDistanceCalculator() {    // 8150
+    void directionDistanceCalculator() {
         int quadrantX = enterprise.getQuadrant()[Enterprise.COORD_X];
         int quadrantY = enterprise.getQuadrant()[Enterprise.COORD_Y];
         int sectorX = enterprise.getSector()[Enterprise.COORD_X];
@@ -499,7 +498,7 @@ public class GalaxyMap {
         printDirection(initialCoords[0], initialCoords[1], finalCoords[0], finalCoords[1]);
     }
 
-    void printDirection(int from_x, int from_y, int to_x, int to_y) { // 8220
+    void printDirection(int from_x, int from_y, int to_x, int to_y) {
         to_y = to_y - from_y;  // delta 2
         from_y = from_x - to_x;    // delta 1
         if (to_y > 0) {
@@ -535,7 +534,7 @@ public class GalaxyMap {
         Util.println("DISTANCE = " + Util.round(Math.sqrt(to_y ^ 2 + from_y ^ 2), 6));
     }
 
-    void starbaseNavData() {    // 8500
+    void starbaseNavData() {
         int sectorX = enterprise.getSector()[Enterprise.COORD_X];
         int sectorY = enterprise.getSector()[Enterprise.COORD_Y];
         if (starbases != 0) {

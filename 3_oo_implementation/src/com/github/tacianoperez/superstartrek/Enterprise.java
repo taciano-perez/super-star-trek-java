@@ -19,24 +19,24 @@ public class Enterprise {
     static final int DEVICE_DAMAGE_CONTROL = 6;
     static final int DEVICE_SHIELD_CONTROL = 7;
     static final int DEVICE_LIBRARY_COMPUTER = 8;
-
     final double[] deviceStatus = new double[9];   // 8  device damage stats D
+
+    // position
     final int[][] cardinalDirections = new int[10][3];   // 9x2 vectors in cardinal directions C
+    int quadrantX;
+    int quadrantY;
+    int sectorX;
+    int sectorY;
 
-    int quadrantX;         // Q1
-    int quadrantY;         // Q2
-    int sectorX;         // S1
-    int sectorY;         // S2
+    // ship status
+    boolean docked = false;
+    int energy = 3000;
+    int torpedoes = 10;
+    int shields = 0;
+    double repairCost;
 
-    boolean docked = false;  // D0
-    int energy = 3000;   // E
-    int torpedoes = 10;     // P
-    int shields = 0;      // S
-
-    double repairCost;  // damage repair cost D4
-
-    final int initialEnergy = energy;      // E0
-    final int initialTorpedoes = torpedoes;        // P0
+    final int initialEnergy = energy;
+    final int initialTorpedoes = torpedoes;
 
     public Enterprise() {
         // random initial position
@@ -138,22 +138,6 @@ public class Enterprise {
         this.quadrantY = quadrant[COORD_Y];
     }
 
-    public void setQuadrantX(int quadrantX) {
-        this.quadrantX = quadrantX;
-    }
-
-    public void setQuadrantY(int quadrantY) {
-        this.quadrantY = quadrantY;
-    }
-
-    public void setSectorX(int sectorX) {
-        this.sectorX = sectorX;
-    }
-
-    public void setSectorY(int sectorY) {
-        this.sectorY = sectorY;
-    }
-
     public int[] getSector() {
         return new int[] {sectorX, sectorY};
     }
@@ -161,11 +145,6 @@ public class Enterprise {
     public void setSector(final int[] sector) {
         this.sectorX = sector[COORD_X];
         this.sectorY = sector[COORD_Y];
-    }
-
-    public void incrementSector(final float[] sector) {
-        this.sectorX += sector[COORD_X];
-        this.sectorY += sector[COORD_Y];
     }
 
     public int[] moveShip(final float course, final int n, final String quadrantMap, final double stardate, final double initialStardate, final int missionDuration, final GameCallback callback) {

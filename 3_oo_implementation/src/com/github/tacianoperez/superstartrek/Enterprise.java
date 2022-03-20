@@ -19,10 +19,10 @@ public class Enterprise {
     static final int DEVICE_DAMAGE_CONTROL = 6;
     static final int DEVICE_SHIELD_CONTROL = 7;
     static final int DEVICE_LIBRARY_COMPUTER = 8;
-    final double[] deviceStatus = new double[9];   // 8  device damage stats D
+    final double[] deviceStatus = new double[9];   // 8  device damage stats
 
     // position
-    final int[][] cardinalDirections = new int[10][3];   // 9x2 vectors in cardinal directions C
+    final int[][] cardinalDirections = new int[10][3];   // 9x2 vectors in cardinal directions
     int quadrantX;
     int quadrantY;
     int sectorX;

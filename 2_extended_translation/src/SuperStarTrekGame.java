@@ -175,13 +175,13 @@ public class SuperStarTrekGame {
                 float random = random();
                 if (random > .98) {
                     klingons = 3;
-                    klingonsInGalaxy = +3;
+                    klingonsInGalaxy += 3;
                 } else if (random > .95) {
                     klingons = 2;
-                    klingonsInGalaxy = +2;
+                    klingonsInGalaxy += 2;
                 } else if (random > .80) {
                     klingons = 1;
-                    klingonsInGalaxy = +1;
+                    klingonsInGalaxy += 1;
                 }
                 starbases = 0;
                 if (random() > .96) {

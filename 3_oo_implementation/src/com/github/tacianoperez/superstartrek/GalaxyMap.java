@@ -301,7 +301,7 @@ public class GalaxyMap {
                     Util.print("*** ");
                     continue;
                 }
-                Util.print(": " + Util.rightStr(Integer.toString(n[l] + 1000), 3) + " ");
+                Util.print(Util.rightStr(Integer.toString(n[l] + 1000), 3) + " ");
             }
             Util.println(": \n" + rowStr);
         }
